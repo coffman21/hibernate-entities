@@ -38,4 +38,28 @@ public class Child {
         this.parent = parent;
         this.name = name;
     }
+
+    public List<GrandChild> getGrandChildren() {
+        return grandChildren;
+    }
+
+    public void setGrandChildren(List<GrandChild> grandChildren) {
+        this.grandChildren = grandChildren;
+    }
+
+    public Parent getParent() {
+        return parent;
+    }
+
+    public void setParent(Parent parent) {
+        this.parent = parent;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
