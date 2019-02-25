@@ -2,7 +2,7 @@ package com.banditos.hibernateentities.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author kkharitonov
@@ -15,7 +15,7 @@ public class Child {
 
     public Child() {};
 
-    public Child(List<GrandChild> grandChildren, Parent parent, String name) {
+    public Child(Set<GrandChild> grandChildren, Parent parent, String name) {
         this.grandChildren = grandChildren;
         this.parent = parent;
         this.name = name;
@@ -26,8 +26,8 @@ public class Child {
     @GeneratedValue
     private long id;
 
-    @OneToMany(mappedBy = "child")
-    private List<GrandChild> grandChildren;
+    @OneToMany(mappedBy = "child", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<GrandChild> grandChildren;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Parent parent;
@@ -39,11 +39,11 @@ public class Child {
         this.name = name;
     }
 
-    public List<GrandChild> getGrandChildren() {
+    public Set<GrandChild> getGrandChildren() {
         return grandChildren;
     }
 
-    public void setGrandChildren(List<GrandChild> grandChildren) {
+    public void setGrandChildren(Set<GrandChild> grandChildren) {
         this.grandChildren = grandChildren;
     }
 

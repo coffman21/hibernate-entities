@@ -1,8 +1,11 @@
 package com.banditos.hibernateentities.model;
 
+import org.springframework.data.rest.core.annotation.RestResource;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author kkharitonov
@@ -15,7 +18,7 @@ public class Parent {
 
     public Parent() {};
 
-    public Parent(List<Child> children, String name) {
+    public Parent(Set<Child> children, String name) {
         this.children = children;
         this.name = name;
     }
@@ -25,16 +28,17 @@ public class Parent {
     @GeneratedValue
     private long id;
 
-    @OneToMany(mappedBy = "parent")
-    private List<Child> children;
+//    @RestResource(exported=false)
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Child> children;
 
     private String name;
 
-    public List<Child> getChildren() {
+    public Set<Child> getChildren() {
         return children;
     }
 
-    public void setChildren(List<Child> children) {
+    public void setChildren(Set<Child> children) {
         this.children = children;
     }
 

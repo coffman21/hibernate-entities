@@ -13,6 +13,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * @author kkharitonov
  * @date 24.08.2018
@@ -23,6 +25,8 @@ public class DataLoader implements ApplicationRunner {
     private ParentRepository parentRepository;
     private ChildRepository childRepository;
     private GrandChildRepository grandChildRepository;
+
+    private static AtomicBoolean isInitialized = new AtomicBoolean(false);
 
     private static final Logger logger = LogManager.getLogger(DataLoader.class);
 
@@ -35,27 +39,35 @@ public class DataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Parent p1 = new Parent();
-        p1.setName("parent1");
-        Parent p2 = new Parent();
-        p2.setName("parent2");
 
-        Child c11 = new Child();
-        c11.setName("child11");
-        c11.setParent(p1);
-        Child c12 = new Child();
-        c12.setName("child12");
-        c12.setParent(p1);
+        if (!isInitialized.get()) {
+
+            Parent p1 = new Parent();
+            p1.setName("parent1");
+            Parent p2 = new Parent();
+            p2.setName("parent2");
+
+            Child c11 = new Child();
+            c11.setName("child11");
+            c11.setParent(p1);
+            Child c12 = new Child();
+            c12.setName("child12");
+            c12.setParent(p1);
 
 
-        GrandChild gc111 = new GrandChild(c11, "gc111");
-        GrandChild gc112 = new GrandChild(c11, "gc112");
+            GrandChild gc111 = new GrandChild(c11, "gc111");
+            GrandChild gc112 = new GrandChild(c11, "gc112");
 
-        parentRepository.save(p1);
-        parentRepository.save(p2);
-        childRepository.save(c11);
-        childRepository.save(c12);
-        grandChildRepository.save(gc111);
-        grandChildRepository.save(gc112);
+            logger.info("Saving initial entities");
+
+            parentRepository.save(p1);
+            parentRepository.save(p2);
+            childRepository.save(c11);
+            childRepository.save(c12);
+            grandChildRepository.save(gc111);
+            grandChildRepository.save(gc112);
+
+            isInitialized.set(true);
+        }
     }
 }
